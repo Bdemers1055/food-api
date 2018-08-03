@@ -32,6 +32,19 @@ server.get('/foods', async (req, res) => {
         });
     }
 });
+//get one special food
+server.get('/foods/:food', async (req, res) => {
+    try { const food = await Food.find();
+        res.status(200).json({
+            food: food
+        });
+    }
+    catch(err) {
+        res.status(500).jason({
+            msg: 'broken'
+        });
+    }
+});
 
 
 // kick it off
