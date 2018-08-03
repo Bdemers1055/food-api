@@ -33,19 +33,24 @@ server.get('/foods', async (req, res) => {
     }
 });
 //get one special food
-server.get('/foods/:food', async (req, res) => {
-    try { const food = await Food.find();
-        res.status(200).json({
-            food: food
-        });
-    }
-    catch(err) {
-        res.status(500).jason({
-            msg: 'broken'
-        });
-    }
+server.get('/foods/:id', async (req, res) => {
+        res.send(`getting ${req.params.id} food`);
 });
 
+//create one special food
+server.post('/foods/:food', async (req, res) => {
+    res.send('new food');
+});
+
+//update food by id
+server.put('/foods/:id', (req, res) => {
+    res.send(`updating ${req.params.id} food`);
+});
+
+// delete food by id
+server.delete('/foods/:id', (req, res) => {
+    res.send(`deleting ${req.params.id} food`);
+});
 
 // kick it off
 
