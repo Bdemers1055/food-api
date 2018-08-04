@@ -78,7 +78,7 @@ server.put('/foods/:id', async (req, res) => {
     const { id } = req.params;
     const { name, type } = req.body;
     try {
-        const updatedFood = await Food.findByIdAndUpdate( id, { name, type }, { new: true});
+        const updatedFood = await Food.findByIdAndUpdate( id, { name, type }, { new: true });
         res.status(200).json({
             msg: 'update food item',
             food: updatedFood
@@ -91,8 +91,19 @@ server.put('/foods/:id', async (req, res) => {
 });
 
 // delete food by id
-server.delete('/foods/:id', (req, res) => {
-    res.send(`deleting ${req.params.id} food`);
+server.delete('/foods/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await Food.findByIdAndRemove(id);
+        res.status(200).json({
+            msg: 'yay deleted'
+        });
+    }
+    catch(err) {
+            res.status(500).json({
+                msg: 'no delete'
+            });
+        }
 });
 
 // kick it off
