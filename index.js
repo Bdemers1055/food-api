@@ -44,7 +44,7 @@ server.get('/foods', async (req, res) => {
 server.get('/foods/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const foods = await Food.find({_id: id });
+        const foods = await Food.find({ _id: id });
         res.status(200).json({
             foods: foods
         });
@@ -56,10 +56,21 @@ server.get('/foods/:id', async (req, res) => {
     }
 });
 
-
-//create one special food
-server.post('/foods/:food', async (req, res) => {
-    res.send('new food');
+//create one food item
+server.post('/foods/', async (req, res) => {
+    const { name, type } = req.body;
+    try {
+        const food = new Food({ name, type });
+        await food.save();
+        res.status(201).json({
+            msg: 'food saved',
+            food
+        });
+    } catch(err){
+            res.status(500).json({
+            msg: 'food was not created'
+        });
+    }
 });
 
 //update food by id
