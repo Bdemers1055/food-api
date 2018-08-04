@@ -18,7 +18,7 @@ const port = process.env.PORT || 2008;
 // powere ups / middleware, 
 server.use(helmet());
 server.use(morgan("combined")); // status logging
-server.use(bodyParser.json());
+server.use(bodyParser.json()); // accept json data
 server.use(bodyParser.urlencoded({ extended: true })); // accept html format data
 
 // models
@@ -39,10 +39,23 @@ server.get('/foods', async (req, res) => {
         });
     }
 });
+
 //get one special food
 server.get('/foods/:id', async (req, res) => {
-        res.send(`getting ${req.params.id} food`);
+    const { id } = req.params;
+    try {
+        const foods = await Food.find({_id: id });
+        res.status(200).json({
+            foods: foods
+        });
+    } catch (error) {
+        res.status(500).json({
+            ms: 'food not found'
+        });
+        
+    }
 });
+
 
 //create one special food
 server.post('/foods/:food', async (req, res) => {
