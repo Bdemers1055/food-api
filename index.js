@@ -22,7 +22,7 @@ server.use(bodyParser.json()); // accept json data
 server.use(bodyParser.urlencoded({ extended: true })); // accept html format data
 
 // models
-const Food = mongoose.model('Food', { name:String });
+const Food = mongoose.model('Food', { name:String, type: String });
 
 //routes
 //get all foods
@@ -74,8 +74,20 @@ server.post('/foods/', async (req, res) => {
 });
 
 //update food by id
-server.put('/foods/:id', (req, res) => {
-    res.send(`updating ${req.params.id} food`);
+server.put('/foods/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, type } = req.body;
+    try {
+        const updatedFood = await Food.findByIdAndUpdate( id, { name, type }, { new: true});
+        res.status(200).json({
+            msg: 'update food item',
+            food: updatedFood
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg: 'food item was not updated, try again'
+        });
+    }
 });
 
 // delete food by id
