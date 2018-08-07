@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router(); // tiny lego brick
-const food = require('../models/food');
+const Food = require('../models/food');
 
 // routes
 //get all foods
 router.get('/foods', async (req, res, next) => {
     try {
-        const foods = await food.find();
+        const foods = await Food.find();
         res.status(200).json({
             foods: foods
         });
@@ -16,11 +16,11 @@ router.get('/foods', async (req, res, next) => {
     }
 });
 
-// get one special et by id
+// get one special food by id
 router.get('/foods/:id', async (req, res, next) => {
     const { id } = req.params; 
     try {
-        const foods = await food.find({ _id: id });
+        const foods = await Food.find({ _id: id });
         res.status(200).json({
             foods: foods
         });
@@ -34,7 +34,7 @@ router.get('/foods/:id', async (req, res, next) => {
 router.post('/foods/', async (req, res, next) => {
     const { name, foodType, foodGroup } = req.body;
     try {
-        const food = new food({ name, foodType, foodGroup });
+        const food = new Food({ name, foodType, foodGroup });
         await food.save();
         res.status(201).json({
             msg: 'saved food',
@@ -50,10 +50,10 @@ router.put('/foods/:id', async (req, res, next) => {
     const { id } = req.params;
     const { name, foodType, foodGroup } = req.body;
     try {
-        const updatedfood = await food.findByIdAndUpdate( id, { name, foodType, foodGroup }, { new: true });
+        const updatedfood = await Food.findByIdAndUpdate( id, { name, foodType, foodGroup }, { new: true });
         res.status(200).json({
             msg: 'update successful',
-            food: updatedfood
+            food: updatedFood
         });
     } catch(err) {
         next(err);
@@ -64,7 +64,7 @@ router.put('/foods/:id', async (req, res, next) => {
 router.delete('/foods/:id', async (req, res, next) => {
     const { id } = req.params; 
     try {
-        await food.findByIdAndRemove(id);
+        await Food.findByIdAndRemove(id);
         res.status(200).json({
             msg: 'yay deleted!'
         });
