@@ -50,7 +50,7 @@ router.put('/foods/:id', async (req, res, next) => {
     const { id } = req.params;
     const { name, foodType, foodGroup } = req.body;
     try {
-        const updatedfood = await Food.findByIdAndUpdate( id, { name, foodType, foodGroup }, { new: true });
+        const updatedFood = await Food.findByIdAndUpdate( id, { name, foodType, foodGroup }, { new: true });
         res.status(200).json({
             msg: 'update successful',
             food: updatedFood
