@@ -21,90 +21,11 @@ server.use(morgan("combined")); // status logging
 server.use(bodyParser.json()); // accept json data
 server.use(bodyParser.urlencoded({ extended: true })); // accept html format data
 
-// models
-const Food = mongoose.model('Food', { name:String, type: String });
+//routes
+const foodRouter = require('./routers/foods');
 
 //routes
-//get all foods
-server.get('/foods', async (req, res) => {
-    try { 
-        const foods = await Food.find();
-        res.status(200).json({
-            foods: foods
-        });
-    }
-    catch(err) {
-        res.status(500).json({
-            msg: 'broken'
-        });
-    }
-});
-
-//get one special food
-server.get('/foods/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const foods = await Food.find({ _id: id });
-        res.status(200).json({
-            foods: foods
-        });
-    } catch (error) {
-        res.status(500).json({
-            ms: 'food not found'
-        });
-        
-    }
-});
-
-//create one food item
-server.post('/foods/', async (req, res) => {
-    const { name, type } = req.body;
-    try {
-        const food = new Food({ name, type });
-        await food.save();
-        res.status(201).json({
-            msg: 'food saved',
-            food
-        });
-    } catch(err){
-            res.status(500).json({
-            msg: 'food was not created'
-        });
-    }
-});
-
-//update food by id
-server.put('/foods/:id', async (req, res) => {
-    const { id } = req.params;
-    const { name, type } = req.body;
-    try {
-        const updatedFood = await Food.findByIdAndUpdate( id, { name, type }, { new: true });
-        res.status(200).json({
-            msg: 'update food item',
-            food: updatedFood
-        });
-    } catch (error) {
-        res.status(500).json({
-            msg: 'food item was not updated, try again'
-        });
-    }
-});
-
-// delete food by id
-server.delete('/foods/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        await Food.findByIdAndRemove(id);
-        res.status(200).json({
-            msg: 'yay deleted'
-        });
-    }
-    catch(err) {
-            res.status(500).json({
-                msg: 'no delete'
-            });
-        }
-});
+server.use(foodRouter);
 
 // kick it off
 
