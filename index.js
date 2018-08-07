@@ -20,12 +20,17 @@ server.use(helmet());
 server.use(morgan("combined")); // status logging
 server.use(bodyParser.json()); // accept json data
 server.use(bodyParser.urlencoded({ extended: true })); // accept html format data
+const errorHandler = require('./middlewares/errorHandler');
+const notFoundHandler = require('./middlewares/404');
 
 //routes
 const foodRouter = require('./routers/foods');
 
 //routes
 server.use(foodRouter);
+
+server.use(notFoundHandler);
+server.use(errorHandler);
 
 // kick it off
 
